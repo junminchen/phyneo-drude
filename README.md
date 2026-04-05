@@ -20,6 +20,16 @@ Contents:
   - exploratory hybrid bulk script combining Drude espol with the existing
     PhyNEO short-range, dispersion, and bonded terms
 
+- `mlff_dmc_bottomup`
+  Machine-learned bottom-up workflow for `DMC`:
+  - monomer graph encoder with 2D attention-style pair bias
+  - continuous nonbonded parameter heads
+  - SAPT decomposed dimer supervision
+  - posterior plots and exported parameter JSON
+
+- `PATENT_DESIGN_AROUND_NOTES.md`
+  Engineering notes for a future lower-risk design-around implementation.
+
 Notes:
 
 - The DMC hybrid bulk script

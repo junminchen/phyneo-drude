@@ -1,0 +1,104 @@
+{
+  "description": "Training summary for the DMC 2D-attention MLFF bottom-up model.",
+  "stage": "full_nonbonded",
+  "seed": 20260406,
+  "steps": 200,
+  "final_loss": 34.33291244506836,
+  "term_rmse_normalized": {
+    "lr_es_kj_mol": 0.159153550863266,
+    "lr_pol_kj_mol": 3.353626251220703,
+    "sr_es_total_kj_mol": 0.9042425751686096,
+    "sr_pol_total_kj_mol": 7.0279316902160645,
+    "exchange_kj_mol": 0.9214614629745483,
+    "dispersion_total_kj_mol": 20.35546875,
+    "ct_like_kj_mol": 0.8023840188980103
+  },
+  "monomer_targets": {
+    "dipole_debye": [
+      -0.07229259127387239,
+      -0.0004545892358630752,
+      -0.12697569907848136
+    ],
+    "isotropic_polarizability_nm3": 0.0060503472546336754
+  },
+  "monomer_predicted": {
+    "dipole_debye": [
+      -0.21549859642982483,
+      -0.0013905410887673497,
+      -0.3684079349040985
+    ],
+    "isotropic_polarizability_nm3": 0.004948632791638374
+  },
+  "training_history": [
+    {
+      "step": 0.0,
+      "loss": 89.3493881225586,
+      "ct_like_kj_mol_rmse": 0.9553248882293701,
+      "dispersion_total_kj_mol_rmse": 41.782615661621094,
+      "exchange_kj_mol_rmse": 0.994368851184845,
+      "lr_es_kj_mol_rmse": 0.1470959186553955,
+      "lr_pol_kj_mol_rmse": 5.7828521728515625,
+      "monomer_dipole_rmse": 2.169738531112671,
+      "monomer_iso_polar_rmse": 0.492743581533432,
+      "regularization": 9.869308269117028e-05,
+      "sr_es_total_kj_mol_rmse": 0.930828869342804,
+      "sr_pol_total_kj_mol_rmse": 37.824337005615234
+    },
+    {
+      "step": 50.0,
+      "loss": 34.33291244506836,
+      "ct_like_kj_mol_rmse": 0.8023840188980103,
+      "dispersion_total_kj_mol_rmse": 20.35546875,
+      "exchange_kj_mol_rmse": 0.9214614629745483,
+      "lr_es_kj_mol_rmse": 0.159153550863266,
+      "lr_pol_kj_mol_rmse": 3.353626251220703,
+      "monomer_dipole_rmse": 1.9211763143539429,
+      "monomer_iso_polar_rmse": 0.1820911318063736,
+      "regularization": 0.07249999791383743,
+      "sr_es_total_kj_mol_rmse": 0.9042425751686096,
+      "sr_pol_total_kj_mol_rmse": 7.0279316902160645
+    },
+    {
+      "step": 100.0,
+      "loss": 34.33291244506836,
+      "ct_like_kj_mol_rmse": 0.8023840188980103,
+      "dispersion_total_kj_mol_rmse": 20.35546875,
+      "exchange_kj_mol_rmse": 0.9214614629745483,
+      "lr_es_kj_mol_rmse": 0.159153550863266,
+      "lr_pol_kj_mol_rmse": 3.353626251220703,
+      "monomer_dipole_rmse": 1.9211763143539429,
+      "monomer_iso_polar_rmse": 0.1820911318063736,
+      "regularization": 0.07249999791383743,
+      "sr_es_total_kj_mol_rmse": 0.9042425751686096,
+      "sr_pol_total_kj_mol_rmse": 7.0279316902160645
+    },
+    {
+      "step": 150.0,
+      "loss": 34.33291244506836,
+      "ct_like_kj_mol_rmse": 0.8023840188980103,
+      "dispersion_total_kj_mol_rmse": 20.35546875,
+      "exchange_kj_mol_rmse": 0.9214614629745483,
+      "lr_es_kj_mol_rmse": 0.159153550863266,
+      "lr_pol_kj_mol_rmse": 3.353626251220703,
+      "monomer_dipole_rmse": 1.9211763143539429,
+      "monomer_iso_polar_rmse": 0.1820911318063736,
+      "regularization": 0.07249999791383743,
+      "sr_es_total_kj_mol_rmse": 0.9042425751686096,
+      "sr_pol_total_kj_mol_rmse": 7.0279316902160645
+    },
+    {
+      "step": 199.0,
+      "loss": 34.33291244506836,
+      "ct_like_kj_mol_rmse": 0.8023840188980103,
+      "dispersion_total_kj_mol_rmse": 20.35546875,
+      "exchange_kj_mol_rmse": 0.9214614629745483,
+      "lr_es_kj_mol_rmse": 0.159153550863266,
+      "lr_pol_kj_mol_rmse": 3.353626251220703,
+      "monomer_dipole_rmse": 1.9211763143539429,
+      "monomer_iso_polar_rmse": 0.1820911318063736,
+      "regularization": 0.07249999791383743,
+      "sr_es_total_kj_mol_rmse": 0.9042425751686096,
+      "sr_pol_total_kj_mol_rmse": 7.0279316902160645
+    }
+  ]
+}
