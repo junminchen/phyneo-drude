@@ -1,0 +1,26 @@
+{
+  "description": "12-point DMC-DMC scan using the real PhyNEO Slater/QqTt/dispersion functional form.",
+  "model_json": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/mlff_dmc_bottomup/output/train_real_slater_12pt/dmc_mlff_real_slater_12pt_model.json",
+  "target_npz": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/mlff_dmc_bottomup/inputs/targets/dmc_dimer_conf001_600_full_targets.npz",
+  "batch_index": 0,
+  "num_points": 12,
+  "physical_term_mapping": {
+    "lr_es_kj_mol": "Drude long-range electrostatics",
+    "lr_pol_kj_mol": "Drude long-range polarization",
+    "qqtt_kj_mol": "QqTtDampingForce",
+    "slater_sr_es_kj_mol": "SlaterSrEsForce",
+    "sr_es_total_kj_mol": "QqTtDampingForce + SlaterSrEsForce",
+    "slater_sr_pol_kj_mol": "SlaterSrPolForce",
+    "sr_pol_total_kj_mol": "SlaterSrPolForce",
+    "slater_ex_kj_mol": "SlaterExForce",
+    "exchange_kj_mol": "SlaterExForce",
+    "damped_dispersion_kj_mol": "ADMPDispPmeForce + SlaterDampingForce",
+    "slater_sr_disp_kj_mol": "SlaterSrDispForce",
+    "dispersion_total_kj_mol": "ADMPDispPmeForce + SlaterDampingForce + SlaterSrDispForce",
+    "slater_dhf_kj_mol": "SlaterDhfForce",
+    "ct_like_kj_mol": "SlaterDhfForce",
+    "total_nonbonded_kj_mol": "lr_es + lr_pol + sr_es_total + sr_pol_total + exchange + dispersion_total + ct_like"
+  },
+  "lr_espol_rmse_kj_mol": 2.5577479638661242,
+  "total_nonbonded_rmse_kj_mol": 10.145016195788978
+}

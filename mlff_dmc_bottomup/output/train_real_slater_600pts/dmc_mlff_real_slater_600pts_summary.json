@@ -1,0 +1,152 @@
+{
+  "description": "Training summary for the DMC 2D-attention MLFF using the real PhyNEO Slater/QqTt/dispersion functional form.",
+  "stage": "full_nonbonded",
+  "seed": 20260406,
+  "steps": 1800,
+  "batch_size": 128,
+  "num_frames": 600,
+  "batch_index": null,
+  "final_loss": 2.958585500717163,
+  "term_rmse_normalized": {
+    "lr_es_kj_mol": 0.2562887668609619,
+    "lr_pol_kj_mol": 1.0380775928497314,
+    "sr_es_total_kj_mol": 0.10024236142635345,
+    "sr_pol_total_kj_mol": 1.0070925951004028,
+    "exchange_kj_mol": 0.03651050105690956,
+    "dispersion_total_kj_mol": 0.027334950864315033,
+    "ct_like_kj_mol": 0.25051066279411316
+  },
+  "physical_term_mapping": {
+    "lr_es_kj_mol": "Drude long-range electrostatics",
+    "lr_pol_kj_mol": "Drude long-range polarization",
+    "qqtt_kj_mol": "QqTtDampingForce",
+    "slater_sr_es_kj_mol": "SlaterSrEsForce",
+    "sr_es_total_kj_mol": "QqTtDampingForce + SlaterSrEsForce",
+    "slater_sr_pol_kj_mol": "SlaterSrPolForce",
+    "sr_pol_total_kj_mol": "SlaterSrPolForce",
+    "slater_ex_kj_mol": "SlaterExForce",
+    "exchange_kj_mol": "SlaterExForce",
+    "damped_dispersion_kj_mol": "ADMPDispPmeForce + SlaterDampingForce",
+    "slater_sr_disp_kj_mol": "SlaterSrDispForce",
+    "dispersion_total_kj_mol": "ADMPDispPmeForce + SlaterDampingForce + SlaterSrDispForce",
+    "slater_dhf_kj_mol": "SlaterDhfForce",
+    "ct_like_kj_mol": "SlaterDhfForce",
+    "total_nonbonded_kj_mol": "lr_es + lr_pol + sr_es_total + sr_pol_total + exchange + dispersion_total + ct_like"
+  },
+  "monomer_targets": {
+    "dipole_debye": [
+      -0.07229259127387239,
+      -0.0004545892358630752,
+      -0.12697569907848136
+    ],
+    "isotropic_polarizability_nm3": 0.0060503472546336754
+  },
+  "monomer_predicted": {
+    "dipole_debye": [
+      -0.06205827370285988,
+      0.00012203251390019432,
+      -0.1356504112482071
+    ],
+    "isotropic_polarizability_nm3": 0.0030393877532333136
+  },
+  "training_history": [
+    {
+      "step": 0.0,
+      "loss": 7.325003147125244,
+      "ct_like_kj_mol_rmse": 0.28536349534988403,
+      "dispersion_total_kj_mol_rmse": 0.07200118154287338,
+      "exchange_kj_mol_rmse": 0.13086506724357605,
+      "lr_es_kj_mol_rmse": 0.3984249532222748,
+      "lr_pol_kj_mol_rmse": 3.61067795753479,
+      "monomer_dipole_rmse": 4.887927055358887,
+      "monomer_iso_polar_rmse": 0.23643013834953308,
+      "regularization": 0.001940420945174992,
+      "sr_es_total_kj_mol_rmse": 0.19553852081298828,
+      "sr_pol_total_kj_mol_rmse": 0.8366671204566956
+    },
+    {
+      "step": 300.0,
+      "loss": 3.082911729812622,
+      "ct_like_kj_mol_rmse": 0.46453025937080383,
+      "dispersion_total_kj_mol_rmse": 0.035452183336019516,
+      "exchange_kj_mol_rmse": 0.06020049378275871,
+      "lr_es_kj_mol_rmse": 0.2163359820842743,
+      "lr_pol_kj_mol_rmse": 1.0572798252105713,
+      "monomer_dipole_rmse": 0.019492922350764275,
+      "monomer_iso_polar_rmse": 0.4971294403076172,
+      "regularization": 0.03266271576285362,
+      "sr_es_total_kj_mol_rmse": 0.09939871728420258,
+      "sr_pol_total_kj_mol_rmse": 0.9362338185310364
+    },
+    {
+      "step": 600.0,
+      "loss": 3.320014476776123,
+      "ct_like_kj_mol_rmse": 0.3772808909416199,
+      "dispersion_total_kj_mol_rmse": 0.038923535495996475,
+      "exchange_kj_mol_rmse": 0.05701747536659241,
+      "lr_es_kj_mol_rmse": 0.26757287979125977,
+      "lr_pol_kj_mol_rmse": 1.026426911354065,
+      "monomer_dipole_rmse": 0.07698911428451538,
+      "monomer_iso_polar_rmse": 0.49743881821632385,
+      "regularization": 0.03390629217028618,
+      "sr_es_total_kj_mol_rmse": 0.10427210479974747,
+      "sr_pol_total_kj_mol_rmse": 1.213564395904541
+    },
+    {
+      "step": 900.0,
+      "loss": 3.1059916019439697,
+      "ct_like_kj_mol_rmse": 0.11254953593015671,
+      "dispersion_total_kj_mol_rmse": 0.02522362768650055,
+      "exchange_kj_mol_rmse": 0.047024890780448914,
+      "lr_es_kj_mol_rmse": 0.22919094562530518,
+      "lr_pol_kj_mol_rmse": 1.040260672569275,
+      "monomer_dipole_rmse": 0.06665804982185364,
+      "monomer_iso_polar_rmse": 0.4972260594367981,
+      "regularization": 0.03410625830292702,
+      "sr_es_total_kj_mol_rmse": 0.10100424289703369,
+      "sr_pol_total_kj_mol_rmse": 1.3192720413208008
+    },
+    {
+      "step": 1200.0,
+      "loss": 3.227064847946167,
+      "ct_like_kj_mol_rmse": 0.252966046333313,
+      "dispersion_total_kj_mol_rmse": 0.035157203674316406,
+      "exchange_kj_mol_rmse": 0.08450296521186829,
+      "lr_es_kj_mol_rmse": 0.23740755021572113,
+      "lr_pol_kj_mol_rmse": 1.0166314840316772,
+      "monomer_dipole_rmse": 0.09667995572090149,
+      "monomer_iso_polar_rmse": 0.4975091814994812,
+      "regularization": 0.03511447831988335,
+      "sr_es_total_kj_mol_rmse": 0.14999081194400787,
+      "sr_pol_total_kj_mol_rmse": 1.2073278427124023
+    },
+    {
+      "step": 1500.0,
+      "loss": 3.3618178367614746,
+      "ct_like_kj_mol_rmse": 0.3883471190929413,
+      "dispersion_total_kj_mol_rmse": 0.023650111630558968,
+      "exchange_kj_mol_rmse": 0.034334272146224976,
+      "lr_es_kj_mol_rmse": 0.2861911952495575,
+      "lr_pol_kj_mol_rmse": 1.1624748706817627,
+      "monomer_dipole_rmse": 0.01701095700263977,
+      "monomer_iso_polar_rmse": 0.4974902868270874,
+      "regularization": 0.03533056005835533,
+      "sr_es_total_kj_mol_rmse": 0.10249175876379013,
+      "sr_pol_total_kj_mol_rmse": 1.1489226818084717
+    },
+    {
+      "step": 1799.0,
+      "loss": 2.7181015014648438,
+      "ct_like_kj_mol_rmse": 0.36841273307800293,
+      "dispersion_total_kj_mol_rmse": 0.019317924976348877,
+      "exchange_kj_mol_rmse": 0.034896984696388245,
+      "lr_es_kj_mol_rmse": 0.27782875299453735,
+      "lr_pol_kj_mol_rmse": 1.0861647129058838,
+      "monomer_dipole_rmse": 0.06989964842796326,
+      "monomer_iso_polar_rmse": 0.4976552128791809,
+      "regularization": 0.03622351959347725,
+      "sr_es_total_kj_mol_rmse": 0.09257098287343979,
+      "sr_pol_total_kj_mol_rmse": 0.6040418744087219
+    }
+  ]
+}

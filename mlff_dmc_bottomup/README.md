@@ -12,9 +12,13 @@ The design goal is:
 - supervise on **SAPT decomposed dimer targets**
 - keep `bulk` out of the training loss
 
-This is an MVP, not a production force field. The training path uses a
-lightweight, differentiable surrogate evaluator rather than the full OpenMM
-plugin evaluator.
+This is an MVP, not a production force field. There are now two training paths:
+
+- the original `surrogate` path, which uses a lightweight differentiable
+  approximation for all nonbonded terms
+- a `real Slater` path, which keeps the Drude long-range surrogate but replaces
+  the short-range and dispersion terms with the actual PhyNEO
+  `QqTt/Slater/Tang-Toennies` functional form
 
 ## Inputs
 
@@ -58,6 +62,25 @@ python mlff_dmc_bottomup/scripts/train_dmc_mlff.py --stage espol --steps 1000
 python mlff_dmc_bottomup/scripts/train_dmc_mlff.py --stage full_nonbonded --steps 3000 --batch-size 128
 ```
 
+4. Train against the real PhyNEO Slater/QqTt/dispersion force terms on the
+12-point batch:
+
+```bash
+python mlff_dmc_bottomup/scripts/train_dmc_real_slater.py \
+  --batch-index 0 \
+  --steps 1200 \
+  --output-dir mlff_dmc_bottomup/output/train_real_slater_12pt \
+  --prefix dmc_mlff_real_slater_12pt
+```
+
+5. Plot the calibrated 12-point real-Slater scan:
+
+```bash
+python mlff_dmc_bottomup/scripts/plot_real_slater_12pt.py \
+  --model-json mlff_dmc_bottomup/output/train_real_slater_12pt/dmc_mlff_real_slater_12pt_model.json \
+  --batch-index 0
+```
+
 ## Model Notes
 
 - The network reads only the monomer graph.
@@ -70,6 +93,12 @@ python mlff_dmc_bottomup/scripts/train_dmc_mlff.py --stage full_nonbonded --step
   - `ct-like` amplitude/range
   - auxiliary short-range `es/pol` scales
 - Dimer energies are computed by a differentiable surrogate evaluator.
+- In the `real Slater` route the physical grouping is fixed to the plugin terms:
+  - `sr_es_total = QqTtDampingForce + SlaterSrEsForce`
+  - `sr_pol_total = SlaterSrPolForce`
+  - `exchange = SlaterExForce`
+  - `dispersion_total = ADMPDispPmeForce + SlaterDampingForce + SlaterSrDispForce`
+  - `ct_like = SlaterDhfForce`
 - The evaluator currently exposes these supervised terms:
   - `lr_es`
   - `lr_pol`

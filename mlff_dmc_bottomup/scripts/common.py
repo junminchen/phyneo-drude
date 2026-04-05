@@ -324,8 +324,11 @@ def init_attention_model(
     hidden_dim: int = 48,
     num_heads: int = 4,
     num_layers: int = 2,
+    num_outputs: int | None = None,
 ) -> dict:
     keys = iter(jax.random.split(rng, 5 + num_layers * 8))
+    if num_outputs is None:
+        num_outputs = len(MODEL_HEAD_ORDER)
 
     def rand(shape, scale=0.08):
         return jax.random.normal(next(keys), shape, dtype=jnp.float32) * scale
@@ -335,9 +338,9 @@ def init_attention_model(
         "input_proj_b": jnp.zeros((hidden_dim,), dtype=jnp.float32),
         "pair_bias": rand((num_pair_bins, num_heads), scale=0.03),
         "layers": [],
-        "head_w": rand((hidden_dim, len(MODEL_HEAD_ORDER)), scale=0.05),
-        "head_local_w": rand((input_dim, len(MODEL_HEAD_ORDER)), scale=0.08),
-        "head_b": jnp.zeros((len(MODEL_HEAD_ORDER),), dtype=jnp.float32),
+        "head_w": rand((hidden_dim, num_outputs), scale=0.05),
+        "head_local_w": rand((input_dim, num_outputs), scale=0.08),
+        "head_b": jnp.zeros((num_outputs,), dtype=jnp.float32),
     }
     head_dim = hidden_dim // num_heads
     for _ in range(num_layers):
