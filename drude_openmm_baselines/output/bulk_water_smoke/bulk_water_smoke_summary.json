@@ -1,0 +1,27 @@
+{
+  "ffxml": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_openmm_baselines/inputs/charmm_polar_2023.xml",
+  "platform": "CUDA",
+  "num_particles": 1260,
+  "num_residues": 252,
+  "initial_energy_kj_mol": 57.87220453238115,
+  "final_energy_kj_mol": -10717.617642617086,
+  "box_edge_nm": 2.0,
+  "cutoff_nm": 0.8,
+  "temperature_k": 300.0,
+  "pressure_atm": 1.0,
+  "dt_fs": 0.5,
+  "nvt_steps": 200,
+  "npt_steps": 500,
+  "max_drude_distance_nm": 0.02,
+  "last_report": {
+    "#\"Step\"": "500",
+    "Time (ps)": "0.25000000000000017",
+    "Potential Energy (kJ/mole)": "-10717.61764456355",
+    "Kinetic Energy (kJ/mole)": "1516.9055552090813",
+    "Total Energy (kJ/mole)": "-9200.712089354469",
+    "Temperature (K)": "241.80490855187574",
+    "Box Volume (nm^3)": "7.896376276601101",
+    "Density (g/mL)": "0.9546973402282349",
+    "Speed (ns/day)": "95.4"
+  }
+}

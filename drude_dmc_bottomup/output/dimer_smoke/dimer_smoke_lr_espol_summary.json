@@ -1,0 +1,11 @@
+{
+  "param_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/dmc_drude_initial.json",
+  "target_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/targets/dmc_dimer_batch000_targets.npz",
+  "target_mode": "lr_espol",
+  "platform": "Reference",
+  "rmse_kj_mol": 56.10186679625994,
+  "mae_kj_mol": 18.86840656148638,
+  "max_abs_kj_mol": 194.0296760695801,
+  "num_points": 12,
+  "num_finite_points": 12
+}

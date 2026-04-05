@@ -1,0 +1,8 @@
+{
+  "ffxml": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_openmm_baselines/inputs/charmm_polar_2023.xml",
+  "pdb": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_openmm_baselines/inputs/water_dimer.pdb",
+  "platform": "CUDA",
+  "num_particles": 10,
+  "initial_energy_kj_mol": -5.693497869472168,
+  "final_energy_kj_mol": -8.32707392906835
+}

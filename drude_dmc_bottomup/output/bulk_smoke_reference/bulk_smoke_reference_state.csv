@@ -1,0 +1,4 @@
+step,time_ps,potential_kj_mol,temperature_k,density_g_ml,speed_ns_day
+5,0.001250,nan,nan,0.43815414,1.6596
+10,0.002500,nan,nan,0.43815414,2.7920
+15,0.003750,nan,nan,0.43815414,3.4426

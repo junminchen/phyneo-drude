@@ -1,0 +1,52 @@
+{
+  "pdb": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/structures/DMC.pdb",
+  "param_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/dmc_drude_initial.json",
+  "platform": "Reference",
+  "field_strength_internal": 1.0,
+  "dipole_e_nm": [
+    -0.015198591370832515,
+    -6.96612449581635e-05,
+    -0.025803706558091888
+  ],
+  "dipole_debye": [
+    -0.7300193875649835,
+    -0.0033459718825631698,
+    -1.2394047315855277
+  ],
+  "polarizability_tensor_nm3": [
+    [
+      7.892461347772106e-05,
+      1.5275372355905148e-08,
+      -9.654853430268728e-06
+    ],
+    [
+      1.5153789110697313e-08,
+      5.146094139258685e-05,
+      -4.0524655939983e-09
+    ],
+    [
+      -9.654902040717728e-06,
+      -4.268122105743899e-09,
+      6.800040983304112e-05
+    ]
+  ],
+  "polarizability_tensor_angstrom3": [
+    [
+      0.07892461347772106,
+      1.5275372355905148e-05,
+      -0.009654853430268728
+    ],
+    [
+      1.5153789110697313e-05,
+      0.05146094139258685,
+      -4.0524655939983e-06
+    ],
+    [
+      -0.009654902040717728,
+      -4.268122105743899e-06,
+      0.06800040983304112
+    ]
+  ],
+  "isotropic_polarizability_nm3": 6.612865490111634e-05,
+  "isotropic_polarizability_angstrom3": 0.06612865490111634
+}

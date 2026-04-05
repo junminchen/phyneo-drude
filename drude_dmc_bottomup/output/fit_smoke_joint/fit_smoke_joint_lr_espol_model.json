@@ -1,0 +1,142 @@
+{
+  "description": "Initial DMC Drude espol model generated from DMC.json alpha/charge.",
+  "residue_name": "DMC",
+  "drude_charge_factor": 3000.0,
+  "default_thole": 1.3,
+  "atom_order": [
+    "C00",
+    "O01",
+    "C02",
+    "O03",
+    "O04",
+    "C05",
+    "H06",
+    "H07",
+    "H08",
+    "H09",
+    "H10",
+    "H11"
+  ],
+  "atoms": [
+    {
+      "index": 1,
+      "name": "C00",
+      "charge": 0.10864013433456421,
+      "alpha": 0.0007642089871091456,
+      "pol_damping": 0.0011680241441354156,
+      "thole": 0.6679587987796552,
+      "drude_charge": -0.9516446139168121,
+      "polarizable": true
+    },
+    {
+      "index": 2,
+      "name": "O01",
+      "charge": -0.42232125997543335,
+      "alpha": 0.0007638979946606993,
+      "pol_damping": 0.0011675488203763962,
+      "thole": 0.6679587987796552,
+      "drude_charge": -0.9514509598188686,
+      "polarizable": true
+    },
+    {
+      "index": 3,
+      "name": "C02",
+      "charge": 0.9010284543037415,
+      "alpha": 0.00029289924598002113,
+      "pol_damping": 0.00044766993960365653,
+      "thole": 0.6679587987796552,
+      "drude_charge": -0.5891526702878542,
+      "polarizable": true
+    },
+    {
+      "index": 4,
+      "name": "O03",
+      "charge": -0.6473934054374695,
+      "alpha": 0.0008453038288784036,
+      "pol_damping": 0.001291970256716013,
+      "thole": 0.6679587987796552,
+      "drude_charge": -1.000864168801621,
+      "polarizable": true
+    },
+    {
+      "index": 5,
+      "name": "O04",
+      "charge": -0.42232125997543335,
+      "alpha": 0.0007638979946606993,
+      "pol_damping": 0.0011675488203763962,
+      "thole": 0.6679587987796552,
+      "drude_charge": -0.9514509598188686,
+      "polarizable": true
+    },
+    {
+      "index": 6,
+      "name": "C05",
+      "charge": 0.10864013433456421,
+      "alpha": 0.0007642089871091456,
+      "pol_damping": 0.0011680241441354156,
+      "thole": 0.6679587987796552,
+      "drude_charge": -0.9516446139168121,
+      "polarizable": true
+    },
+    {
+      "index": 7,
+      "name": "H06",
+      "charge": 0.062287867069244385,
+      "alpha": 0.0002841964464035319,
+      "pol_damping": 0.0004343684995546937,
+      "thole": 0.6679587987796552,
+      "drude_charge": -0.580334039948446,
+      "polarizable": true
+    },
+    {
+      "index": 8,
+      "name": "H07",
+      "charge": 0.062287867069244385,
+      "alpha": 0.0002841964464035319,
+      "pol_damping": 0.0004343684995546937,
+      "thole": 0.6679587987796552,
+      "drude_charge": -0.580334039948446,
+      "polarizable": true
+    },
+    {
+      "index": 9,
+      "name": "H08",
+      "charge": 0.062287867069244385,
+      "alpha": 0.00028419648448734875,
+      "pol_damping": 0.0004343685577623546,
+      "thole": 0.6679587987796552,
+      "drude_charge": -0.5803340788323498,
+      "polarizable": true
+    },
+    {
+      "index": 10,
+      "name": "H09",
+      "charge": 0.062287867069244385,
+      "alpha": 0.00028419648448734875,
+      "pol_damping": 0.0004343685577623546,
+      "thole": 0.6679587987796552,
+      "drude_charge": -0.5803340788323498,
+      "polarizable": true
+    },
+    {
+      "index": 11,
+      "name": "H10",
+      "charge": 0.062287867069244385,
+      "alpha": 0.00028419648448734875,
+      "pol_damping": 0.0004343685577623546,
+      "thole": 0.6679587987796552,
+      "drude_charge": -0.5803340788323498,
+      "polarizable": true
+    },
+    {
+      "index": 12,
+      "name": "H11",
+      "charge": 0.062287867069244385,
+      "alpha": 0.00028419648448734875,
+      "pol_damping": 0.0004343685577623546,
+      "thole": 0.6679587987796552,
+      "drude_charge": -0.5803340788323498,
+      "polarizable": true
+    }
+  ]
+}

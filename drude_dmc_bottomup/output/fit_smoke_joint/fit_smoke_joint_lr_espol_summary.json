@@ -1,0 +1,75 @@
+{
+  "param_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/dmc_drude_initial.json",
+  "target_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/targets/dmc_dimer_batch000_targets.npz",
+  "target_mode": "lr_espol",
+  "platform": "Reference",
+  "success": false,
+  "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+  "fun": 0.28060172300239433,
+  "x": [
+    0.6542749916139975,
+    0.508379765557314,
+    0.5138144605997348
+  ],
+  "weights": {
+    "dimer": 1.0,
+    "monomer_dipole": 0.5,
+    "monomer_polar": 0.5
+  },
+  "objective_components": {
+    "dimer_term": 0.17914548342811012,
+    "dipole_term": 0.04680898075157352,
+    "polar_term": 0.03658494682131079,
+    "regularization": 0.059759260533519924
+  },
+  "final_dimer_rmse_kj_mol": 2.9896864291214933,
+  "num_finite_dimer_points": 12,
+  "monomer": {
+    "target_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/targets/monomer_targets.template.json",
+    "predicted_dipole_debye": [
+      -0.07568011509635601,
+      -0.0015261744550130823,
+      -0.12113152567416278
+    ],
+    "target_dipole_debye": [
+      -0.07229259127387239,
+      -0.0004545892358630752,
+      -0.12697569907848136
+    ],
+    "predicted_polarizability_tensor_nm3": [
+      [
+        0.00734313757329331,
+        1.8585779481522249e-06,
+        -0.0011838126840536917
+      ],
+      [
+        1.8568464502396941e-06,
+        0.0048599175840407524,
+        -8.68382547954674e-07
+      ],
+      [
+        -0.0011838199113680576,
+        -8.693772676178643e-07,
+        0.006001482932450184
+      ]
+    ],
+    "target_polarizability_tensor_nm3": [
+      [
+        0.007381373494361611,
+        3.096301933895534e-06,
+        -0.0010486364831300812
+      ],
+      [
+        2.3505449646596733e-06,
+        0.004576276859499353,
+        -5.894136797450101e-07
+      ],
+      [
+        -0.0010488305571378558,
+        2.7267549166781203e-07,
+        0.006193391410040059
+      ]
+    ]
+  },
+  "fitted_model": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/output/fit_smoke_joint/fit_smoke_joint_lr_espol_model.json"
+}

@@ -1,0 +1,19 @@
+{
+  "param_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/dmc_drude_initial.json",
+  "pdb": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/structures/dmc_100mol_box.pdb",
+  "itp": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/params_results/DMC.itp",
+  "platform": "Reference",
+  "temperature_k": 300.0,
+  "pressure_atm": 1.0,
+  "dt_fs": 0.25,
+  "nvt_steps": 5,
+  "npt_steps": 10,
+  "last_report": {
+    "step": "15",
+    "time_ps": "0.003750",
+    "potential_kj_mol": "nan",
+    "temperature_k": "nan",
+    "density_g_ml": "0.43815414",
+    "speed_ns_day": "3.4426"
+  }
+}

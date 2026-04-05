@@ -1,0 +1,11 @@
+REMARK   1 DRUDE WATER DIMER BASELINE
+MODEL        1
+HETATM    1 OH2  HOH A   1       0.000   0.000   0.000  1.00  0.00           O
+HETATM    2  H1  HOH A   1      -0.757   0.000  -0.586  1.00  0.00           H
+HETATM    3  H2  HOH A   1       0.757   0.000  -0.586  1.00  0.00           H
+HETATM    4 OH2  HOH A   2       0.000   0.000   2.950  1.00  0.00           O
+HETATM    5  H1  HOH A   2      -0.757   0.000   2.364  1.00  0.00           H
+HETATM    6  H2  HOH A   2       0.757   0.000   2.364  1.00  0.00           H
+TER
+ENDMDL
+END

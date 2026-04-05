@@ -1,0 +1,15 @@
+{
+  "param_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/dmc_drude_initial.json",
+  "target_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/targets/dmc_dimer_batch000_targets.npz",
+  "target_mode": "lr_espol",
+  "platform": "Reference",
+  "success": false,
+  "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+  "fun": 1.1790553959644479,
+  "x": [
+    0.501507770318274,
+    0.5,
+    1.3098960222034166
+  ],
+  "fitted_model": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/output/fit_smoke/fit_smoke_lr_espol_model.json"
+}

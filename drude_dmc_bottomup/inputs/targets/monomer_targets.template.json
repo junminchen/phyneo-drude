@@ -1,0 +1,62 @@
+{
+  "description": "QM monomer dipole/polarizability target generated with PySCF.",
+  "source": {
+    "program": "PySCF",
+    "version": "2.12.1",
+    "method": "PBE0",
+    "basis": "def2-svp",
+    "field_au": 0.0005,
+    "grid_level": 3,
+    "conv_tol": 1e-10,
+    "pdb": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/structures/DMC.pdb"
+  },
+  "units": {
+    "dipole_debye": "debye",
+    "polarizability_tensor_nm3": "nm^3"
+  },
+  "dipole_debye": [
+    -0.07229259127387239,
+    -0.0004545892358630752,
+    -0.12697569907848136
+  ],
+  "polarizability_tensor_nm3": [
+    [
+      0.007381373494361611,
+      3.096301933895534e-06,
+      -0.0010486364831300812
+    ],
+    [
+      2.3505449646596733e-06,
+      0.004576276859499353,
+      -5.894136797450101e-07
+    ],
+    [
+      -0.0010488305571378558,
+      2.7267549166781203e-07,
+      0.006193391410040059
+    ]
+  ],
+  "polarizability_tensor_angstrom3": [
+    [
+      7.381373494361611,
+      0.003096301933895534,
+      -1.0486364831300812
+    ],
+    [
+      0.0023505449646596733,
+      4.5762768594993535,
+      -0.0005894136797450102
+    ],
+    [
+      -1.0488305571378558,
+      0.00027267549166781204,
+      6.193391410040059
+    ]
+  ],
+  "isotropic_polarizability_nm3": 0.0060503472546336754,
+  "isotropic_polarizability_angstrom3": 6.050347254633675,
+  "notes": [
+    "Finite-field polarizability tensor from central differences of the SCF dipole.",
+    "This target can be used together with DMC-DMC dimer lr_es+lr_pol in joint bottom-up fitting."
+  ]
+}

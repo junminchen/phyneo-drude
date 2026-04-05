@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+*.dcd
+*.chk
+
+# Keep small summaries/csv/pdb when useful, but ignore bulky transient outputs.
+output/**/state.xml
+output/**/checkpoint*
+output/qm_monomer_orca/

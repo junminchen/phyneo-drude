@@ -1,0 +1,169 @@
+{
+  "param_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/output/fit_smoke_joint/fit_smoke_joint_lr_espol_model.json",
+  "xml": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/openmm-phyneo-plugin/examples/dmc_bulk_compare/inputs/phyneo_ecl.xml",
+  "pdb": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/drude_dmc_bottomup/inputs/structures/dmc_100mol_box.pdb",
+  "intra_params_dir": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/openmm-phyneo-plugin/examples/dmc_bulk_compare/inputs/params_results",
+  "platform": "CUDA",
+  "precision": "mixed",
+  "temperature_k": 300.0,
+  "pressure_atm": 1.0,
+  "dt_fs": 0.25,
+  "cutoff_nm": 1.0,
+  "max_drude_distance_nm": 0.02,
+  "integrator": "langevin",
+  "nvt_steps": 200,
+  "npt_steps": 800,
+  "short_range_s12": 0.169,
+  "initial_energy_kj_mol": -268822.92690173676,
+  "post_nvt_energy_kj_mol": 373643293462236.6,
+  "final_energy_kj_mol": 1.71419822781724e+16,
+  "status": "error",
+  "error": "ValueError: The number of positions must match the number of atoms",
+  "last_report": {
+    "#\"Step\"": "300",
+    "Time (ps)": "0.07500000000000005",
+    "Potential Energy (kJ/mole)": "2265817730905893.0",
+    "Kinetic Energy (kJ/mole)": "1820504854765187.5",
+    "Total Energy (kJ/mole)": "4086322585671080.5",
+    "Temperature (K)": "121784047461426.86",
+    "Box Volume (nm^3)": "35.135431861425346",
+    "Density (g/mL)": "0.4257199876495339",
+    "Speed (ns/day)": "92.2"
+  },
+  "force_count": 22,
+  "force_inventory": [
+    {
+      "index": 0,
+      "name": "NonbondedForce",
+      "type": "NonbondedForce",
+      "group": 0
+    },
+    {
+      "index": 1,
+      "name": "DrudeForce",
+      "type": "DrudeForce",
+      "group": 1
+    },
+    {
+      "index": 2,
+      "name": "QqTtDampingForce",
+      "type": "CustomNonbondedForce",
+      "group": 2
+    },
+    {
+      "index": 3,
+      "name": "QqTtDampingForce",
+      "type": "CustomBondForce",
+      "group": 3
+    },
+    {
+      "index": 4,
+      "name": "SlaterExForce",
+      "type": "CustomNonbondedForce",
+      "group": 4
+    },
+    {
+      "index": 5,
+      "name": "SlaterExForce",
+      "type": "CustomBondForce",
+      "group": 5
+    },
+    {
+      "index": 6,
+      "name": "SlaterSrEsForce",
+      "type": "CustomNonbondedForce",
+      "group": 6
+    },
+    {
+      "index": 7,
+      "name": "SlaterSrEsForce",
+      "type": "CustomBondForce",
+      "group": 7
+    },
+    {
+      "index": 8,
+      "name": "SlaterSrPolForce",
+      "type": "CustomNonbondedForce",
+      "group": 8
+    },
+    {
+      "index": 9,
+      "name": "SlaterSrPolForce",
+      "type": "CustomBondForce",
+      "group": 9
+    },
+    {
+      "index": 10,
+      "name": "SlaterSrDispForce",
+      "type": "CustomNonbondedForce",
+      "group": 10
+    },
+    {
+      "index": 11,
+      "name": "SlaterSrDispForce",
+      "type": "CustomBondForce",
+      "group": 11
+    },
+    {
+      "index": 12,
+      "name": "SlaterDhfForce",
+      "type": "CustomNonbondedForce",
+      "group": 12
+    },
+    {
+      "index": 13,
+      "name": "SlaterDhfForce",
+      "type": "CustomBondForce",
+      "group": 13
+    },
+    {
+      "index": 14,
+      "name": "CustomNonbondedForce",
+      "type": "CustomNonbondedForce",
+      "group": 14
+    },
+    {
+      "index": 15,
+      "name": "CustomBondForce",
+      "type": "CustomBondForce",
+      "group": 15
+    },
+    {
+      "index": 16,
+      "name": "IntraHarmonicBondForce",
+      "type": "HarmonicBondForce",
+      "group": 16
+    },
+    {
+      "index": 17,
+      "name": "IntraHarmonicAngleForce",
+      "type": "HarmonicAngleForce",
+      "group": 17
+    },
+    {
+      "index": 18,
+      "name": "IntraPeriodicTorsionForce",
+      "type": "PeriodicTorsionForce",
+      "group": 18
+    },
+    {
+      "index": 19,
+      "name": "IntraLennardJonesExceptions",
+      "type": "CustomBondForce",
+      "group": 19
+    },
+    {
+      "index": 20,
+      "name": "CMMotionRemover",
+      "type": "CMMotionRemover",
+      "group": 20
+    },
+    {
+      "index": 21,
+      "name": "MonteCarloBarostat",
+      "type": "MonteCarloBarostat",
+      "group": 21
+    }
+  ],
+  "elapsed_ns_day_final": 84.74411415582776
+}
