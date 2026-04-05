@@ -45,6 +45,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--num-layers", type=int, default=2)
     parser.add_argument("--seed", type=int, default=20260406)
     parser.add_argument("--log-interval", type=int, default=200)
+    parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--output-dir", default=str(OUTPUT / "train_full_nonbonded"))
     parser.add_argument("--prefix", default="dmc_mlff_full_nonbonded")
     return parser.parse_args()
@@ -122,6 +123,8 @@ def main() -> None:
     monomer_dipole = jnp.asarray(monomer_targets["dipole_debye"], dtype=jnp.float32)
     monomer_iso = jnp.asarray(monomer_targets["isotropic_polarizability_nm3"], dtype=jnp.float32)
     base_params_jax = {key: jnp.asarray(value, dtype=jnp.float32) for key, value in base_params.items()}
+    num_frames = int(targets_np["shift_angstrom"].shape[0])
+    batch_size = min(args.batch_size, num_frames)
 
     rng = jax.random.PRNGKey(args.seed)
     model_params = init_attention_model(
@@ -136,14 +139,21 @@ def main() -> None:
     opt_state = optimizer.init(model_params)
     history: list[dict[str, float]] = []
 
-    def loss_fn(params):
+    def loss_fn(params, frame_indices):
         predicted = predict_parameters(params, graph, base_params)
-        terms = evaluate_decomposed_terms(predicted, distances_nm, distances_ang)
+        terms = evaluate_decomposed_terms(
+            predicted,
+            distances_nm[frame_indices],
+            distances_ang[frame_indices],
+        )
         monomer = evaluate_monomer_properties(predicted, graph)
         components = {}
         value = jnp.asarray(0.0, dtype=jnp.float32)
         for term in term_names:
-            term_rmse = jnp.sqrt(jnp.mean(jnp.square(terms[term] - targets[term]))) / target_norm[term]
+            term_rmse = (
+                jnp.sqrt(jnp.mean(jnp.square(terms[term] - targets[term][frame_indices])))
+                / target_norm[term]
+            )
             components[f"{term}_rmse"] = term_rmse
             value = value + term_rmse
         dipole_rmse = jnp.linalg.norm(monomer["dipole_debye"] - monomer_dipole) / jnp.maximum(jnp.linalg.norm(monomer_dipole), 1.0e-6)
@@ -152,7 +162,7 @@ def main() -> None:
         components["monomer_iso_polar_rmse"] = iso_polar_rmse
         value = value + 0.35 * dipole_rmse + 0.35 * iso_polar_rmse
 
-        charge_reg = jnp.mean(jnp.square(predicted["charge"] - base_params_jax["charge"])) / 0.01
+        charge_reg = jnp.mean(jnp.square(predicted["charge"] - base_params_jax["charge"])) / 0.04
         alpha_reg = jnp.mean(jnp.square(jnp.log(predicted["alpha"] / base_params_jax["alpha"])))
         thole_reg = jnp.mean(jnp.square(jnp.log(predicted["thole"] / base_params_jax["thole"])))
         short_reg = (
@@ -162,17 +172,30 @@ def main() -> None:
             + jnp.mean(jnp.square(jnp.log(predicted["ct_eps"] / base_params_jax["ct_eps"])))
             + jnp.mean(jnp.square(jnp.log(predicted["ct_lamb"] / base_params_jax["ct_lamb"])))
         )
-        regularization = 0.10 * charge_reg + 0.05 * alpha_reg + 0.05 * thole_reg + 0.02 * short_reg
+        regularization = 0.05 * charge_reg + 0.03 * alpha_reg + 0.03 * thole_reg + 0.01 * short_reg
         components["regularization"] = regularization
         value = value + regularization
         return value, {"components": components, "predicted": predicted, "terms": terms, "monomer": monomer}
 
     value_and_grad = jax.value_and_grad(loss_fn, has_aux=True)
 
+    @jax.jit
+    def train_step(params, state, key):
+        if batch_size >= num_frames:
+            frame_indices = jnp.arange(num_frames, dtype=jnp.int32)
+        else:
+            frame_indices = jax.random.choice(key, num_frames, shape=(batch_size,), replace=False)
+        (loss_value, aux), grads = value_and_grad(params, frame_indices)
+        updates, state = optimizer.update(grads, state, params)
+        params = optax.apply_updates(params, updates)
+        return params, state, loss_value, aux
+
+    full_frame_indices = jnp.arange(num_frames, dtype=jnp.int32)
+    eval_loss_fn = jax.jit(loss_fn)
+
     for step in range(args.steps):
-        (loss_value, aux), grads = value_and_grad(model_params)
-        updates, opt_state = optimizer.update(grads, opt_state, model_params)
-        model_params = optax.apply_updates(model_params, updates)
+        rng, step_key = jax.random.split(rng)
+        model_params, opt_state, loss_value, aux = train_step(model_params, opt_state, step_key)
         if step % args.log_interval == 0 or step == args.steps - 1:
             record = {"step": float(step), "loss": float(loss_value)}
             for key, item in aux["components"].items():
@@ -180,7 +203,7 @@ def main() -> None:
             history.append(record)
             print(json.dumps(record, sort_keys=True))
 
-    final_loss, final_aux = loss_fn(model_params)
+    final_loss, final_aux = eval_loss_fn(model_params, full_frame_indices)
     predicted_np = {key: np.asarray(value) for key, value in final_aux["predicted"].items()}
     terms_np = {key: np.asarray(value) for key, value in final_aux["terms"].items()}
     monomer_np = {key: np.asarray(value) for key, value in final_aux["monomer"].items()}
@@ -200,6 +223,7 @@ def main() -> None:
         "stage": args.stage,
         "seed": args.seed,
         "steps": args.steps,
+        "batch_size": batch_size,
         "final_loss": float(final_loss),
         "term_rmse_normalized": {key: float(final_aux["components"][f"{key}_rmse"]) for key in term_names},
         "monomer_targets": {

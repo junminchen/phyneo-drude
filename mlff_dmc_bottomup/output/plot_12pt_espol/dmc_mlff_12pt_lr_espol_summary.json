@@ -1,0 +1,10 @@
+{
+  "description": "12-point DMC-DMC lr es+pol scan for the fitted MLFF model.",
+  "model_json": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/mlff_dmc_bottomup/output/train_600pts_v2/dmc_mlff_600pts_v2_model.json",
+  "target_npz": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/mlff_dmc_bottomup/inputs/targets/dmc_dimer_conf001_600_full_targets.npz",
+  "batch_index": 0,
+  "num_points": 12,
+  "rmse_kj_mol": 7.935531225305191,
+  "mae_kj_mol": 6.62070324535792,
+  "max_abs_kj_mol": 12.974898338317871
+}

@@ -26,7 +26,7 @@ DEFAULT_DMC_PDB = INPUTS / "structures" / "DMC.pdb"
 DEFAULT_DMC_DIMER_PDB = INPUTS / "structures" / "dimer_001_DMC_DMC.pdb"
 DEFAULT_DMC_JSON = INPUTS / "params_results" / "DMC.json"
 DEFAULT_MONOMER_TARGETS = INPUTS / "targets" / "monomer_targets.json"
-DEFAULT_FULL_TARGETS = INPUTS / "targets" / "dmc_dimer_batch000_full_targets.npz"
+DEFAULT_FULL_TARGETS = INPUTS / "targets" / "dmc_dimer_conf001_600_full_targets.npz"
 
 ONE_4PI_EPS0 = 138.935456
 E_NM_TO_DEBYE = 48.03204255928332
@@ -194,25 +194,46 @@ def load_legacy_pickle(path: Path):
 def extract_full_dimer_targets(
     raw_pickle: Path = SOURCE_RAW_DIMER_PICKLE,
     config_key: str = "conf_001_DMC_DMC",
-    batch_key: str = "000",
+    batch_key: str | None = None,
 ) -> dict[str, np.ndarray]:
     data = load_legacy_pickle(raw_pickle)
-    batch = data[config_key][batch_key]
-    targets = {
-        "shift_angstrom": np.asarray(batch["shift"], dtype=float),
-        "posA_angstrom": np.asarray(batch["posA"], dtype=float),
-        "posB_angstrom": np.asarray(batch["posB"], dtype=float),
-        "weights": np.asarray(batch["wts"], dtype=float),
-        "lr_es_kj_mol": np.asarray(batch["lr_es"], dtype=float),
-        "lr_pol_kj_mol": np.asarray(batch["lr_pol"], dtype=float),
-        "lr_disp_kj_mol": np.asarray(batch["lr_disp"], dtype=float),
-        "sr_es_total_kj_mol": np.asarray(batch["es"], dtype=float) - np.asarray(batch["lr_es"], dtype=float),
-        "sr_pol_total_kj_mol": np.asarray(batch["pol"], dtype=float) - np.asarray(batch["lr_pol"], dtype=float),
-        "exchange_kj_mol": np.asarray(batch["ex"], dtype=float),
-        "sr_disp_kj_mol": np.asarray(batch["disp"], dtype=float),
-        "ct_like_kj_mol": np.asarray(batch["dhf"], dtype=float),
-        "total_nonbonded_kj_mol": np.asarray(batch["tot_full"], dtype=float),
+    batches = data[config_key]
+    batch_names = [batch_key] if batch_key is not None else sorted(batches)
+    stacked: dict[str, list[np.ndarray]] = {
+        "shift_angstrom": [],
+        "posA_angstrom": [],
+        "posB_angstrom": [],
+        "weights": [],
+        "lr_es_kj_mol": [],
+        "lr_pol_kj_mol": [],
+        "lr_disp_kj_mol": [],
+        "sr_es_total_kj_mol": [],
+        "sr_pol_total_kj_mol": [],
+        "exchange_kj_mol": [],
+        "sr_disp_kj_mol": [],
+        "ct_like_kj_mol": [],
+        "total_nonbonded_kj_mol": [],
+        "batch_index": [],
     }
+    for batch_index, name in enumerate(batch_names):
+        batch = batches[name]
+        n = len(batch["shift"])
+        stacked["shift_angstrom"].append(np.asarray(batch["shift"], dtype=float))
+        stacked["posA_angstrom"].append(np.asarray(batch["posA"], dtype=float))
+        stacked["posB_angstrom"].append(np.asarray(batch["posB"], dtype=float))
+        stacked["weights"].append(np.asarray(batch["wts"], dtype=float))
+        stacked["lr_es_kj_mol"].append(np.asarray(batch["lr_es"], dtype=float))
+        stacked["lr_pol_kj_mol"].append(np.asarray(batch["lr_pol"], dtype=float))
+        stacked["lr_disp_kj_mol"].append(np.asarray(batch["lr_disp"], dtype=float))
+        stacked["sr_es_total_kj_mol"].append(np.asarray(batch["es"], dtype=float) - np.asarray(batch["lr_es"], dtype=float))
+        stacked["sr_pol_total_kj_mol"].append(np.asarray(batch["pol"], dtype=float) - np.asarray(batch["lr_pol"], dtype=float))
+        stacked["exchange_kj_mol"].append(np.asarray(batch["ex"], dtype=float))
+        stacked["sr_disp_kj_mol"].append(np.asarray(batch["disp"], dtype=float))
+        stacked["ct_like_kj_mol"].append(np.asarray(batch["dhf"], dtype=float))
+        stacked["total_nonbonded_kj_mol"].append(np.asarray(batch["tot_full"], dtype=float))
+        stacked["batch_index"].append(np.full((n,), batch_index, dtype=np.int32))
+
+    targets = {key: np.concatenate(values, axis=0) for key, values in stacked.items()}
     targets["dispersion_total_kj_mol"] = targets["sr_disp_kj_mol"] + targets["lr_disp_kj_mol"]
     targets["target_lr_espol_kj_mol"] = targets["lr_es_kj_mol"] + targets["lr_pol_kj_mol"]
     targets["target_sr_espol_kj_mol"] = targets["sr_es_total_kj_mol"] + targets["sr_pol_total_kj_mol"]
@@ -224,6 +245,7 @@ def save_full_target_bundle(targets: dict[str, np.ndarray], npz_path: Path, csv_
     ensure_dir(npz_path.parent)
     np.savez(npz_path, **targets)
     fields = [
+        "batch_index",
         "shift_angstrom",
         "lr_es_kj_mol",
         "lr_pol_kj_mol",
@@ -243,7 +265,13 @@ def save_full_target_bundle(targets: dict[str, np.ndarray], npz_path: Path, csv_
         writer.writerow(fields)
         rows = zip(*(targets[field] for field in fields))
         for row in rows:
-            writer.writerow([f"{float(value):.10f}" for value in row])
+            formatted = []
+            for field, value in zip(fields, row):
+                if field == "batch_index":
+                    formatted.append(str(int(value)))
+                else:
+                    formatted.append(f"{float(value):.10f}")
+            writer.writerow(formatted)
 
 
 def load_base_nonbonded_parameters(path: Path = DEFAULT_DMC_JSON) -> dict[str, np.ndarray]:
@@ -308,6 +336,7 @@ def init_attention_model(
         "pair_bias": rand((num_pair_bins, num_heads), scale=0.03),
         "layers": [],
         "head_w": rand((hidden_dim, len(MODEL_HEAD_ORDER)), scale=0.05),
+        "head_local_w": rand((input_dim, len(MODEL_HEAD_ORDER)), scale=0.08),
         "head_b": jnp.zeros((len(MODEL_HEAD_ORDER),), dtype=jnp.float32),
     }
     head_dim = hidden_dim // num_heads
@@ -360,8 +389,8 @@ def predict_parameters(
     pair_bins = jnp.asarray(np.clip(graph.graph_distance, 0, MAX_GRAPH_DISTANCE))
     base = {key: jnp.asarray(value, dtype=jnp.float32) for key, value in base_params.items()}
     hidden = encode_graph(model_params, features, pair_bins)
-    raw = hidden @ model_params["head_w"] + model_params["head_b"]
-    charge_delta = 0.08 * jnp.tanh(raw[:, 0])
+    raw = hidden @ model_params["head_w"] + features @ model_params["head_local_w"] + model_params["head_b"]
+    charge_delta = 0.16 * jnp.tanh(raw[:, 0])
     charge = base["charge"] + charge_delta
     charge = charge - (jnp.sum(charge) - base["total_charge"]) / charge.shape[0]
     alpha = jnp.maximum(base["alpha"] * jnp.exp(0.6 * jnp.tanh(raw[:, 1])), MIN_POSITIVE)
@@ -472,3 +501,24 @@ def parameter_summary(predicted: dict[str, np.ndarray], atom_names: tuple[str, .
             row[key] = float(np.asarray(values)[idx])
         summary.append(row)
     return summary
+
+
+def load_predicted_parameters_from_model_json(path: Path) -> dict[str, np.ndarray]:
+    payload = load_json(path)
+    atoms = payload["atom_parameters"]
+    keys = (
+        "charge",
+        "alpha",
+        "thole",
+        "c6",
+        "rep_eps",
+        "rep_lamb",
+        "ct_eps",
+        "ct_lamb",
+        "sr_es_scale",
+        "sr_pol_scale",
+    )
+    return {
+        key: np.asarray([float(atom[key]) for atom in atoms], dtype=np.float32)
+        for key in keys
+    }

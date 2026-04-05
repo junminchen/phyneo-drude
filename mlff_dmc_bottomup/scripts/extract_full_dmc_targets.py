@@ -16,7 +16,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Extract full DMC-DMC SAPT decomposition targets for MLFF training.")
     parser.add_argument("--raw-pickle", default=str(SOURCE_RAW_DIMER_PICKLE))
     parser.add_argument("--config-key", default="conf_001_DMC_DMC")
-    parser.add_argument("--batch-key", default="000")
+    parser.add_argument("--batch-key", default=None)
     parser.add_argument("--output-npz", default=str(DEFAULT_FULL_TARGETS))
     parser.add_argument("--output-csv", default=str(Path(DEFAULT_FULL_TARGETS).with_suffix(".csv")))
     return parser.parse_args()
@@ -35,6 +35,7 @@ def main() -> None:
     save_full_target_bundle(targets, output_npz, output_csv)
     print(f"Wrote {output_npz}")
     print(f"Wrote {output_csv}")
+    print(f"Frames: {targets['shift_angstrom'].shape[0]}")
 
 
 if __name__ == "__main__":

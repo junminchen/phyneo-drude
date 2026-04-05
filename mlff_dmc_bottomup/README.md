@@ -28,8 +28,9 @@ plugin evaluator.
   QM monomer anchors:
   - dipole
   - isotropic polarizability
-- `inputs/targets/dmc_dimer_batch000_full_targets.npz`
-  Full SAPT decomposition bundle extracted from the raw `pickle`.
+- `inputs/targets/dmc_dimer_conf001_600_full_targets.npz`
+  Full SAPT decomposition bundle for `conf_001_DMC_DMC`, extracted across all
+  50 batches (`600` total dimer points).
 
 ## Workflow
 
@@ -42,8 +43,8 @@ python mlff_dmc_bottomup/scripts/extract_full_dmc_targets.py
 
 This writes:
 
-- `inputs/targets/dmc_dimer_batch000_full_targets.npz`
-- `inputs/targets/dmc_dimer_batch000_full_targets.csv`
+- `inputs/targets/dmc_dimer_conf001_600_full_targets.npz`
+- `inputs/targets/dmc_dimer_conf001_600_full_targets.csv`
 
 2. Train the monomer-parameter MLFF in `espol` warm-start mode:
 
@@ -54,7 +55,7 @@ python mlff_dmc_bottomup/scripts/train_dmc_mlff.py --stage espol --steps 1000
 3. Train the full nonbonded surrogate:
 
 ```bash
-python mlff_dmc_bottomup/scripts/train_dmc_mlff.py --stage full_nonbonded --steps 3000
+python mlff_dmc_bottomup/scripts/train_dmc_mlff.py --stage full_nonbonded --steps 3000 --batch-size 128
 ```
 
 ## Model Notes
@@ -77,6 +78,8 @@ python mlff_dmc_bottomup/scripts/train_dmc_mlff.py --stage full_nonbonded --step
   - `exchange`
   - `dispersion_total`
   - `ct_like`
+- By default the trainer uses the full `600`-point `conf_001_DMC_DMC` bundle,
+  not a single 12-point batch.
 
 ## Outputs
 
