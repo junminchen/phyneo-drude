@@ -41,6 +41,14 @@ E_NM_TO_DEBYE = 48.03204255928332
 DA_PER_NM3_TO_G_PER_ML = 1.66053906660e-3
 ONE_4PI_EPS0 = 138.935456
 
+DMC_ATOM_GROUP_ORDER = (
+    "ester_carbon",
+    "ester_oxygen",
+    "carbonyl_carbon",
+    "carbonyl_oxygen",
+    "methyl_hydrogen",
+)
+
 
 @dataclass(frozen=True)
 class ResidueTemplate:
@@ -199,19 +207,44 @@ def load_drude_model(path: Path) -> dict:
     return load_json(path)
 
 
+def dmc_atom_group(name: str) -> str:
+    raw = name.strip().upper()
+    normalized = normalize_atom_label(name)
+    if raw in {"C00", "C05"} or normalized in {"C0", "C5"}:
+        return "ester_carbon"
+    if raw in {"O01", "O04"} or normalized in {"O1", "O4"}:
+        return "ester_oxygen"
+    if raw == "C02" or normalized == "C2":
+        return "carbonyl_carbon"
+    if raw == "O03" or normalized == "O3":
+        return "carbonyl_oxygen"
+    if raw.startswith("H") or normalized.startswith("H"):
+        return "methyl_hydrogen"
+    raise ValueError(f"Unsupported DMC atom label for grouped fitting: {name}")
+
+
 def scale_drude_model(
     base_model: dict,
     *,
     alpha_scale: float = 1.0,
     drude_charge_scale: float = 1.0,
     thole_scale: float = 1.0,
+    thole_group_scales: dict[str, float] | None = None,
+    charge_group_deltas: dict[str, float] | None = None,
 ) -> dict:
     model = copy.deepcopy(base_model)
+    thole_group_scales = thole_group_scales or {}
+    charge_group_deltas = charge_group_deltas or {}
     for atom in model["atoms"]:
+        group = dmc_atom_group(atom["name"])
         atom["alpha"] = float(atom["alpha"]) * alpha_scale
         atom["drude_charge"] = float(atom["drude_charge"]) * drude_charge_scale
-        atom["thole"] = float(atom["thole"]) * thole_scale
+        atom["thole"] = float(atom["thole"]) * thole_scale * float(thole_group_scales.get(group, 1.0))
+        atom["charge"] = float(atom["charge"]) + float(charge_group_deltas.get(group, 0.0))
         atom["polarizable"] = bool(atom["alpha"] > MIN_POLARIZABILITY and abs(atom["drude_charge"]) > 1.0e-8)
+    metadata = model.setdefault("fit_metadata", {})
+    metadata["thole_group_scales"] = {group: float(thole_group_scales.get(group, 1.0)) for group in DMC_ATOM_GROUP_ORDER}
+    metadata["charge_group_deltas"] = {group: float(charge_group_deltas.get(group, 0.0)) for group in DMC_ATOM_GROUP_ORDER}
     return model
 
 

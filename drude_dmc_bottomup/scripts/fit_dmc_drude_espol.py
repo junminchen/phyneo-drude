@@ -17,9 +17,11 @@ from common import (
     DEFAULT_DIMER_TARGETS,
     DEFAULT_DRUDE_MODEL,
     DEFAULT_MONOMER_TEMPLATE,
+    DMC_ATOM_GROUP_ORDER,
     OUTPUT,
     create_drude_espol_system,
     create_scf_context,
+    dmc_atom_group,
     evaluate_monomer_response,
     load_drude_model,
     make_positions_with_drudes,
@@ -102,6 +104,35 @@ def load_monomer_targets(path: Path) -> dict | None:
     }
 
 
+def independent_charge_groups() -> tuple[str, ...]:
+    return DMC_ATOM_GROUP_ORDER[:-1]
+
+
+def charge_group_counts(base_model: dict) -> dict[str, int]:
+    counts = {group: 0 for group in DMC_ATOM_GROUP_ORDER}
+    for atom in base_model["atoms"]:
+        counts[dmc_atom_group(atom["name"])] += 1
+    return counts
+
+
+def decode_group_parameters(base_model: dict, x: np.ndarray) -> tuple[dict[str, float], dict[str, float]]:
+    thole_group_scales = {
+        group: float(value) for group, value in zip(DMC_ATOM_GROUP_ORDER, x[2 : 2 + len(DMC_ATOM_GROUP_ORDER)])
+    }
+    charge_groups = independent_charge_groups()
+    raw_charge_deltas = {
+        group: float(value)
+        for group, value in zip(charge_groups, x[2 + len(DMC_ATOM_GROUP_ORDER) : 2 + len(DMC_ATOM_GROUP_ORDER) + len(charge_groups)])
+    }
+    counts = charge_group_counts(base_model)
+    total_assigned = sum(counts[group] * raw_charge_deltas[group] for group in charge_groups)
+    hydrogen_group = DMC_ATOM_GROUP_ORDER[-1]
+    hydrogen_delta = -total_assigned / counts[hydrogen_group]
+    charge_group_deltas = dict(raw_charge_deltas)
+    charge_group_deltas[hydrogen_group] = float(hydrogen_delta)
+    return thole_group_scales, charge_group_deltas
+
+
 def write_curve_csv(path: Path, shifts: np.ndarray, target: np.ndarray, predicted: np.ndarray) -> None:
     with open(path, "w", encoding="ascii", newline="") as handle:
         writer = csv.writer(handle)
@@ -150,11 +181,14 @@ def main() -> None:
 
     def objective(x: np.ndarray) -> float:
         nonlocal best_components
+        thole_group_scales, charge_group_deltas = decode_group_parameters(base_model, x)
         scaled = scale_drude_model(
             base_model,
             alpha_scale=float(x[0]),
             drude_charge_scale=float(x[1]),
-            thole_scale=float(x[2]),
+            thole_scale=1.0,
+            thole_group_scales=thole_group_scales,
+            charge_group_deltas=charge_group_deltas,
         )
         curve = evaluate_curve(topology, targets, scaled, args.platform, args.precision)
         finite_mask = np.isfinite(curve)
@@ -180,7 +214,10 @@ def main() -> None:
             alpha_target = monomer_targets["polarizability_tensor_nm3"]
             dipole_term = float(np.linalg.norm(pred_mu - mu_target) / max(np.linalg.norm(mu_target), 1.0e-8))
             polar_term = float(np.linalg.norm(pred_alpha - alpha_target) / max(np.linalg.norm(alpha_target), 1.0e-8))
-        regularization = 0.1 * float(np.sum((x - np.array([1.0, 1.0, 1.0])) ** 2))
+        scale_reg = 0.05 * float((x[0] - 1.0) ** 2 + (x[1] - 1.0) ** 2)
+        thole_reg = 0.05 * float(sum((value - 1.0) ** 2 for value in thole_group_scales.values()))
+        charge_reg = 25.0 * float(sum(value**2 for value in charge_group_deltas.values()))
+        regularization = scale_reg + thole_reg + charge_reg
         value = float(
             args.dimer_weight * dimer_term
             + args.monomer_dipole_weight * dipole_term
@@ -188,25 +225,36 @@ def main() -> None:
             + regularization
         )
         best_components = {
-            "dimer_term": dimer_term,
-            "dipole_term": dipole_term,
-            "polar_term": polar_term,
-            "regularization": regularization,
-        }
+                "dimer_term": dimer_term,
+                "dipole_term": dipole_term,
+                "polar_term": polar_term,
+                "scale_regularization": scale_reg,
+                "thole_regularization": thole_reg,
+                "charge_regularization": charge_reg,
+                "regularization": regularization,
+            }
         return value
 
+    charge_groups = independent_charge_groups()
+    x0 = np.array([1.0, 1.0] + [1.0] * len(DMC_ATOM_GROUP_ORDER) + [0.0] * len(charge_groups), dtype=float)
+    bounds = [(0.3, 1.5), (0.2, 1.5)]
+    bounds.extend((0.25, 2.5) for _ in DMC_ATOM_GROUP_ORDER)
+    bounds.extend((-0.05, 0.05) for _ in charge_groups)
     result = minimize(
         objective,
-        x0=np.array([1.0, 1.0, 1.0], dtype=float),
+        x0=x0,
         method="L-BFGS-B",
-        bounds=[(0.5, 1.5), (0.5, 1.5), (0.5, 2.0)],
+        bounds=bounds,
         options={"maxiter": args.maxiter},
     )
+    thole_group_scales, charge_group_deltas = decode_group_parameters(base_model, result.x)
     fitted = scale_drude_model(
         base_model,
         alpha_scale=float(result.x[0]),
         drude_charge_scale=float(result.x[1]),
-        thole_scale=float(result.x[2]),
+        thole_scale=1.0,
+        thole_group_scales=thole_group_scales,
+        charge_group_deltas=charge_group_deltas,
     )
     final_curve = evaluate_curve(topology, targets, fitted, args.platform, args.precision)
     finite_mask = np.isfinite(final_curve)
@@ -245,6 +293,14 @@ def main() -> None:
             "message": result.message,
             "fun": float(result.fun),
             "x": result.x.tolist(),
+            "parameter_blocks": {
+                "global_scales": {
+                    "alpha_scale": float(result.x[0]),
+                    "drude_charge_scale": float(result.x[1]),
+                },
+                "thole_group_scales": thole_group_scales,
+                "charge_group_deltas": charge_group_deltas,
+            },
             "weights": {
                 "dimer": args.dimer_weight,
                 "monomer_dipole": args.monomer_dipole_weight,
@@ -260,7 +316,9 @@ def main() -> None:
         },
     )
     print(f"Fit success: {result.success}")
-    print(f"alpha_scale={result.x[0]:.6f} drude_charge_scale={result.x[1]:.6f} thole_scale={result.x[2]:.6f}")
+    print(f"alpha_scale={result.x[0]:.6f} drude_charge_scale={result.x[1]:.6f}")
+    print(f"thole_group_scales={thole_group_scales}")
+    print(f"charge_group_deltas={charge_group_deltas}")
 
 
 if __name__ == "__main__":
