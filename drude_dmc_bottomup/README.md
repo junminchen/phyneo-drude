@@ -63,25 +63,7 @@ This reports:
 python scripts/run_dmc_drude_dimer_scan.py --target-mode lr_espol
 ```
 
-3b. Compare the fitted Drude scan against the MPID long-range `ADMPPme` scan and make a PNG:
-
-```bash
-python scripts/compare_mpid_vs_drude_dimer_scan.py
-```
-
-This uses:
-
-- the fitted Drude model in `output/fit_smoke_joint/fit_smoke_joint_lr_espol_model.json`
-- the local MPID XML in `inputs/mpid/phyneo_ecl.xml`
-- the same DMC-DMC bottom-up target bundle in `inputs/targets/dmc_dimer_batch000_targets.npz`
-
-Outputs go to:
-
-- `output/mpid_vs_drude_dimer_scan/*.csv`
-- `output/mpid_vs_drude_dimer_scan/*.json`
-- `output/mpid_vs_drude_dimer_scan/*.png`
-
-4. Fit a minimal set of Drude scaling parameters:
+4. Fit a minimal set of Drude scaling parameters against the SAPT dimer target and the QM monomer target:
 
 ```bash
 python scripts/fit_dmc_drude_espol.py --target-mode lr_espol
@@ -94,6 +76,31 @@ The first fitting pass only adjusts:
 - `thole_scale`
 
 It keeps the fixed charges from `DMC.json`.
+
+This writes:
+
+- `output/fit_joint/dmc_drude_joint_lr_espol_model.json`
+- `output/fit_joint/dmc_drude_joint_lr_espol_summary.json`
+- `output/fit_joint/dmc_drude_joint_lr_espol_curve.csv`
+- `output/fit_joint/dmc_drude_joint_lr_espol_curve.png`
+
+4b. Compare the fitted Drude scan against the MPID long-range `ADMPPme` scan and make a PNG:
+
+```bash
+python scripts/compare_mpid_vs_drude_dimer_scan.py
+```
+
+This uses:
+
+- the fitted Drude model in `output/fit_joint/dmc_drude_joint_lr_espol_model.json`
+- the local MPID XML in `inputs/mpid/phyneo_ecl.xml`
+- the same DMC-DMC bottom-up target bundle in `inputs/targets/dmc_dimer_batch000_targets.npz`
+
+Outputs go to:
+
+- `output/mpid_vs_drude_dimer_scan/*.csv`
+- `output/mpid_vs_drude_dimer_scan/*.json`
+- `output/mpid_vs_drude_dimer_scan/*.png`
 
 5. Posterior-only bulk validation:
 
@@ -114,7 +121,7 @@ numerical stress test, not as a production liquid model.
 6. Exploratory hybrid bulk MD:
 
 ```bash
-python scripts/run_dmc_drude_hybrid_bulk.py --param-file output/fit_smoke_joint/fit_smoke_joint_lr_espol_model.json
+python scripts/run_dmc_drude_hybrid_bulk.py --param-file output/fit_joint/dmc_drude_joint_lr_espol_model.json
 ```
 
 This path combines:
@@ -148,5 +155,5 @@ It requires access to `openmm-phyneo-plugin`. The script looks for either:
 This directory is intentionally bottom-up only:
 
 - dimer SAPT data drives the main target
-- monomer QM targets can be inserted into `inputs/targets/monomer_targets.template.json`
+- monomer QM targets are read from `inputs/targets/monomer_targets.template.json`
 - bulk runs are for posterior validation, not parameter optimization

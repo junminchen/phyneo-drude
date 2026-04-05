@@ -1,0 +1,77 @@
+{
+  "param_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/drude_dmc_bottomup/inputs/dmc_drude_initial.json",
+  "target_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/drude_dmc_bottomup/inputs/targets/dmc_dimer_batch000_targets.npz",
+  "target_mode": "lr_espol",
+  "platform": "Reference",
+  "success": true,
+  "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+  "fun": 0.2719543979536164,
+  "x": [
+    0.6520361225158174,
+    0.5,
+    0.5261302349274637
+  ],
+  "weights": {
+    "dimer": 1.0,
+    "monomer_dipole": 0.5,
+    "monomer_polar": 0.5
+  },
+  "objective_components": {
+    "dimer_term": 0.17301680665174593,
+    "dipole_term": 0.04249390456423438,
+    "polar_term": 0.0362549970752467,
+    "regularization": 0.05956314048063327
+  },
+  "final_dimer_rmse_kj_mol": 2.887407426007749,
+  "num_finite_dimer_points": 12,
+  "curve_csv": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/drude_dmc_bottomup/output/fit_joint/dmc_drude_joint_lr_espol_curve.csv",
+  "curve_png": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/drude_dmc_bottomup/output/fit_joint/dmc_drude_joint_lr_espol_curve.png",
+  "monomer": {
+    "target_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/drude_dmc_bottomup/inputs/targets/monomer_targets.template.json",
+    "predicted_dipole_debye": [
+      -0.07826552156383139,
+      -0.0015160540168606817,
+      -0.12565342646178435
+    ],
+    "target_dipole_debye": [
+      -0.07229259127387239,
+      -0.0004545892358630752,
+      -0.12697569907848136
+    ],
+    "predicted_polarizability_tensor_nm3": [
+      [
+        0.0073479339743678105,
+        1.853879206618611e-06,
+        -0.0011935915502583787
+      ],
+      [
+        1.8518422184261597e-06,
+        0.004841085868362645,
+        -8.600200092843674e-07
+      ],
+      [
+        -0.0011935995710718513,
+        -8.61174362796861e-07,
+        0.005995305386562194
+      ]
+    ],
+    "target_polarizability_tensor_nm3": [
+      [
+        0.007381373494361611,
+        3.096301933895534e-06,
+        -0.0010486364831300812
+      ],
+      [
+        2.3505449646596733e-06,
+        0.004576276859499353,
+        -5.894136797450101e-07
+      ],
+      [
+        -0.0010488305571378558,
+        2.7267549166781203e-07,
+        0.006193391410040059
+      ]
+    ]
+  },
+  "fitted_model": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/drude_dmc_bottomup/output/fit_joint/dmc_drude_joint_lr_espol_model.json"
+}

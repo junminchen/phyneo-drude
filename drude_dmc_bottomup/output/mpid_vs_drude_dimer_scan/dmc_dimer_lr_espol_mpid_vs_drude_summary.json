@@ -1,13 +1,13 @@
 {
-  "drude_param_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/drude_dmc_bottomup/output/fit_smoke_joint/fit_smoke_joint_lr_espol_model.json",
+  "drude_param_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/drude_dmc_bottomup/output/fit_joint/dmc_drude_joint_lr_espol_model.json",
   "target_file": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/drude_dmc_bottomup/inputs/targets/dmc_dimer_batch000_targets.npz",
   "mpid_xml": "/home/am3-peichenzhong-group/Documents/project/test_MPID_DMFF/phyneo-drude/drude_dmc_bottomup/inputs/mpid/phyneo_ecl.xml",
   "drude_platform": "Reference",
   "mpid_platform": "Reference",
   "drude_vs_target": {
-    "rmse_kj_mol": 2.9896864291214933,
-    "mae_kj_mol": 2.75120598688189,
-    "max_abs_kj_mol": 4.752841046111371
+    "rmse_kj_mol": 2.887407426007749,
+    "mae_kj_mol": 2.661627092354498,
+    "max_abs_kj_mol": 4.576022330744308
   },
   "mpid_vs_target": {
     "rmse_kj_mol": 2.10397765415892,
@@ -15,9 +15,9 @@
     "max_abs_kj_mol": 6.625761581067728
   },
   "drude_vs_mpid": {
-    "rmse_kj_mol": 4.610315423570951,
-    "mae_kj_mol": 3.7080040297750343,
-    "max_abs_kj_mol": 11.378602627179099
+    "rmse_kj_mol": 4.510307421118305,
+    "mae_kj_mol": 3.618425135247642,
+    "max_abs_kj_mol": 11.201783911812036
   },
   "num_points": 12
 }

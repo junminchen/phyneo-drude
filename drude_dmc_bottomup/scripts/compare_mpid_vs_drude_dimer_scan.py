@@ -20,7 +20,7 @@ SCRIPTS = ROOT / "scripts"
 INPUTS = ROOT / "inputs"
 OUTPUT = ROOT / "output"
 
-DEFAULT_DRUDE_MODEL = ROOT / "output" / "fit_smoke_joint" / "fit_smoke_joint_lr_espol_model.json"
+DEFAULT_DRUDE_MODEL = ROOT / "output" / "fit_joint" / "dmc_drude_joint_lr_espol_model.json"
 DEFAULT_TARGETS = INPUTS / "targets" / "dmc_dimer_batch000_targets.npz"
 DEFAULT_MONOMER_PDB = INPUTS / "structures" / "DMC.pdb"
 DEFAULT_DIMER_PDB = INPUTS / "structures" / "dimer_001_DMC_DMC.pdb"

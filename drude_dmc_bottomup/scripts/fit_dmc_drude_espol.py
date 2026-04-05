@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 import openmm.app as app
 import openmm.unit as unit
@@ -39,9 +41,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dimer-weight", type=float, default=1.0)
     parser.add_argument("--monomer-dipole-weight", type=float, default=0.5)
     parser.add_argument("--monomer-polar-weight", type=float, default=0.5)
-    parser.add_argument("--maxiter", type=int, default=30)
-    parser.add_argument("--output-dir", default=str(OUTPUT / "fit"))
-    parser.add_argument("--prefix", default="dmc_drude_fit")
+    parser.add_argument("--maxiter", type=int, default=100)
+    parser.add_argument("--output-dir", default=str(OUTPUT / "fit_joint"))
+    parser.add_argument("--prefix", default="dmc_drude_joint")
     return parser.parse_args()
 
 
@@ -98,6 +100,38 @@ def load_monomer_targets(path: Path) -> dict | None:
         "dipole_debye": np.asarray(dipole, dtype=float),
         "polarizability_tensor_nm3": np.asarray(polar, dtype=float),
     }
+
+
+def write_curve_csv(path: Path, shifts: np.ndarray, target: np.ndarray, predicted: np.ndarray) -> None:
+    with open(path, "w", encoding="ascii", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["shift_angstrom", "target_kj_mol", "predicted_kj_mol", "error_kj_mol"])
+        for row in zip(shifts, target, predicted, predicted - target):
+            writer.writerow([f"{float(value):.8f}" for value in row])
+
+
+def plot_curve_png(path: Path, shifts: np.ndarray, target: np.ndarray, predicted: np.ndarray) -> None:
+    order = np.argsort(shifts)
+    x = shifts[order]
+    target_ord = target[order]
+    pred_ord = predicted[order]
+    err_ord = pred_ord - target_ord
+
+    fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(8, 8), constrained_layout=True)
+    ax0.plot(x, target_ord, marker="o", linewidth=1.8, label="SAPT target (lr es+pol)")
+    ax0.plot(x, pred_ord, marker="s", linewidth=1.8, label="Drude fit")
+    ax0.set_ylabel("Interaction Energy (kJ/mol)")
+    ax0.set_title("DMC-DMC Bottom-Up Drude Fit")
+    ax0.legend()
+
+    ax1.plot(x, err_ord, marker="s", linewidth=1.6, label="Drude - target")
+    ax1.axhline(0.0, color="black", linewidth=1.0)
+    ax1.set_xlabel("Scan Coordinate (angstrom)")
+    ax1.set_ylabel("Error (kJ/mol)")
+    ax1.legend()
+
+    fig.savefig(path, dpi=180)
+    plt.close(fig)
 
 
 def main() -> None:
@@ -177,6 +211,10 @@ def main() -> None:
     final_curve = evaluate_curve(topology, targets, fitted, args.platform, args.precision)
     finite_mask = np.isfinite(final_curve)
     final_dimer_rmse = float(np.sqrt(np.mean((final_curve[finite_mask] - target[finite_mask]) ** 2))) if np.any(finite_mask) else float("nan")
+    curve_csv = output_dir / f"{args.prefix}_{args.target_mode}_curve.csv"
+    curve_png = output_dir / f"{args.prefix}_{args.target_mode}_curve.png"
+    write_curve_csv(curve_csv, targets["shift_angstrom"], target, final_curve)
+    plot_curve_png(curve_png, targets["shift_angstrom"], target, final_curve)
     monomer_summary = None
     if monomer_targets is not None:
         response = evaluate_monomer_response(
@@ -215,6 +253,8 @@ def main() -> None:
             "objective_components": best_components,
             "final_dimer_rmse_kj_mol": final_dimer_rmse,
             "num_finite_dimer_points": int(np.count_nonzero(finite_mask)),
+            "curve_csv": str(curve_csv.resolve()),
+            "curve_png": str(curve_png.resolve()),
             "monomer": monomer_summary,
             "fitted_model": str(fitted_path.resolve()),
         },
