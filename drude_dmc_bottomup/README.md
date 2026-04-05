@@ -63,6 +63,24 @@ This reports:
 python scripts/run_dmc_drude_dimer_scan.py --target-mode lr_espol
 ```
 
+3b. Compare the fitted Drude scan against the MPID long-range `ADMPPme` scan and make a PNG:
+
+```bash
+python scripts/compare_mpid_vs_drude_dimer_scan.py
+```
+
+This uses:
+
+- the fitted Drude model in `output/fit_smoke_joint/fit_smoke_joint_lr_espol_model.json`
+- the local MPID XML in `inputs/mpid/phyneo_ecl.xml`
+- the same DMC-DMC bottom-up target bundle in `inputs/targets/dmc_dimer_batch000_targets.npz`
+
+Outputs go to:
+
+- `output/mpid_vs_drude_dimer_scan/*.csv`
+- `output/mpid_vs_drude_dimer_scan/*.json`
+- `output/mpid_vs_drude_dimer_scan/*.png`
+
 4. Fit a minimal set of Drude scaling parameters:
 
 ```bash
