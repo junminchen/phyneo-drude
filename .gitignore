@@ -8,3 +8,19 @@ __pycache__/
 output/**/state.xml
 output/**/checkpoint*
 output/qm_monomer_orca/
+
+# Imported polff training stack: keep source/config, ignore bulky data and run artifacts.
+mlff_dmc_bottomup/polff_train_stack/**/__pycache__/
+mlff_dmc_bottomup/polff_train_stack/**/*.pyc
+mlff_dmc_bottomup/polff_train_stack/**/processed_data/
+mlff_dmc_bottomup/polff_train_stack/**/processed_data_dmc_all/
+mlff_dmc_bottomup/polff_train_stack/**/training_logs/
+mlff_dmc_bottomup/polff_train_stack/**/training_logs_dmc_all/
+mlff_dmc_bottomup/polff_train_stack/**/training_logs_dmc_all_*/
+mlff_dmc_bottomup/polff_train_stack/**/ckpt/
+mlff_dmc_bottomup/polff_train_stack/**/example.h5
+mlff_dmc_bottomup/polff_train_stack/**/trained_models/
+mlff_dmc_bottomup/polff_train_stack/**/*.pt
+mlff_dmc_bottomup/polff_train_stack/**/*.pkl
+mlff_dmc_bottomup/polff_train_stack/**/*.jpg
+mlff_dmc_bottomup/polff_train_stack/**/*.log
